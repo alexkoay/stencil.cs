@@ -31,7 +31,7 @@ namespace Stencil.Elements
 						if (elem.type == YamlElement.Types.Sequence)
 						{
 							var cfac = new ElementFactory(fac);
-							foreach (var pair in elem.keys()) { cfac.style[pair.Key] = pair.Value; }
+							foreach (var pair in node.keys()) { cfac.style[pair.Key] = pair.Value; }
 							nodes = elem.list().Select(i => cfac.Detect(i)).ToList();
 						}
 					}

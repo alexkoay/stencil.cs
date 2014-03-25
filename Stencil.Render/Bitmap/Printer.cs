@@ -8,19 +8,19 @@ namespace Stencil.Render
 	public class BitmapPrinter
 	{
 		public enum Type { Detect, Normal, Zebra };
-		public string name;
-		Printer prt;
+		public string Name { get; private set; }
+		public Printer Prt { get; private set; }
 		Type type;
 
 		public BitmapPrinter() { }
 		public BitmapPrinter(string n, Type t = Type.Detect)
 		{
-			name = n;
+			Name = n;
 			if (t == Type.Detect)
 			{
-				if (name.Contains("ZPL")
-					|| name.Contains("ZDesigner")
-					|| name.Contains("Zebra"))
+				if (Name.Contains("ZPL")
+					|| Name.Contains("ZDesigner")
+					|| Name.Contains("Zebra"))
 				{ t = Type.Zebra; }
 				else { t = Type.Normal; }
 			}
@@ -30,46 +30,30 @@ namespace Stencil.Render
 			{
 				case Type.Detect: throw new Exception("Unable to detect printer type.");
 				case Type.Normal: break;
-				case Type.Zebra: prt = new ZPL(name);  break;
+				case Type.Zebra: Prt = new ZPL(Name);  break;
 			}
 		}
 
-		public void Start(string doc = "Stencil.Render.BitmapPrinter") { prt.Start(doc); }
-		public void End() { prt.End(); }
+		public void Start(string doc = "Stencil.Render.BitmapPrinter") { Prt.Start(doc); Prt.Setup(); }
+		public void End() { Prt.End(); }
+		public void Print(BitmapOutput bmp, int qty = 1) { Prt.Print(bmp, qty); }
 
-		public void Print(BitmapOutput bmp, int qty = 1, float threshold = 1.0f)
-		{
-			if (qty == 0) { return; }
-			var grf = bmp.ToGRF(threshold);
-
-			var sb = new StringBuilder();
-			for (var y = 0; y < grf.GetLength(1); ++y)
-				for (var x = 0; x < grf.GetLength(0); ++x)
-					sb.AppendFormat("{0:X2}", grf[x, y]);
-
-			prt.Spool(String.Format("~DG000,{0},{1},", grf.GetLength(0) * grf.GetLength(1), grf.GetLength(0)));
-			prt.Spool(sb.ToString());
-			prt.Spool(String.Format("^XA^MMT^PW{0}^LL0{1}^LS0^FT0,0^XG000.GRF,1,1^FS^PQ{2},0,{2},Y^XZ", grf.GetLength(0) * 8, grf.GetLength(1), qty));
-			prt.Flush();
-		}
-
-		interface Printer
+		public interface Printer
 		{
 			void Open();
 			void Close();
 			void Start(string doc);
 			void End();
-			void Spool(byte[] bytes);
-			void Spool(string str);
-			void Flush();
+			void Setup();
+			void Print(BitmapOutput bmp, int qty);
 		}
-		class ZPL : Printer
+		public class ZPL : Printer
 		{
 			public string Name { get; private set; }
 
 			public bool Opened { get { return handle != IntPtr.Zero; } }
 			public bool Started { get { return docinfo != null; } }
-			public bool Paged { get; set; }
+			public bool Paged { get; private set; }
 
 			IntPtr handle = IntPtr.Zero;
 			Win32.DOCINFOA docinfo = null;
@@ -117,6 +101,26 @@ namespace Stencil.Render
 					Win32.EndDocPrinter(handle);
 					docinfo = null;
 				}
+			}
+
+			public void Setup()
+			{
+				Spool("^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^JUS^LRN^CI0^XZ");
+			}
+			public void Print(BitmapOutput bmp, int qty = 1)
+			{
+				if (qty == 0) { return; }
+				var grf = bmp.ToGRF(1.0f);
+
+				var sb = new StringBuilder();
+				for (var y = 0; y < grf.GetLength(1); ++y)
+					for (var x = 0; x < grf.GetLength(0); ++x)
+						sb.AppendFormat("{0:X2}", grf[x, y]);
+
+				Spool(String.Format("~DG000,{0},{1},", grf.GetLength(0) * grf.GetLength(1), grf.GetLength(0)));
+				Spool(sb.ToString());
+				Spool(String.Format("^XA^MMT^PW{0}^LL0{1}^LS0^FT0,0^XG000.GRF,1,1^FS^PQ{2},0,{2},Y^XZ", grf.GetLength(0) * 8, grf.GetLength(1), qty));
+				Flush();
 			}
 
 			public void Page(IntPtr bytes, Int32 count)

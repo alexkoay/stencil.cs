@@ -1,0 +1,11 @@
+syntax: glob
+
+*.cab
+*.datasource
+*.suo
+*.user
+bin/*
+obj/*
+packages/*
+Debug/*
+Release/*

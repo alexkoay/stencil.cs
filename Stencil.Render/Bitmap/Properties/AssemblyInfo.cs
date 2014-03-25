@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Stencil.Render.Bitmap")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Template bitmap renderer.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Sime Darby")]
+[assembly: AssemblyCompany("Koay Zi Hao")]
 [assembly: AssemblyProduct("Stencil.Render.Bitmap")]
-[assembly: AssemblyCopyright("Copyright © Sime Darby 2014")]
+[assembly: AssemblyCopyright("Copyright © Koay Zi Hao 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

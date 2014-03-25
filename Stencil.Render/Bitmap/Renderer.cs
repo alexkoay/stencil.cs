@@ -55,7 +55,7 @@ namespace Stencil.Render
 				}
 			}
 
-			return new BitmapOutput(elem.rect.CalcUL(size), img);
+			return new BitmapOutput(elem, elem.rect.CalcUL(size), img);
 		}
 
 		////////////////////////////////////////////////////////////////////////
@@ -88,7 +88,7 @@ namespace Stencil.Render
 				}
 				file.Dispose();
 			}
-			return new BitmapOutput(elem.rect.CalcUL(size), img);
+			return new BitmapOutput(elem, elem.rect.CalcUL(size), img);
 		}
 
 		////////////////////////////////////////////////////////////////////////
@@ -158,7 +158,7 @@ namespace Stencil.Render
 				}
 				qr.Dispose();
 			}
-			return new BitmapOutput(elem.rect.CalcUL(size), img);
+			return new BitmapOutput(elem, elem.rect.CalcUL(size), img);
 		}
 
 		////////////////////////////////////////////////////////////////////////
@@ -179,7 +179,7 @@ namespace Stencil.Render
 				grf.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
 				grf.DrawString(text, font, Brushes.Black, new RectangleF(new PointF(), new SizeF(size.x, size.y + 1)), StringFormat.GenericTypographic);
 			}
-			return new BitmapOutput(elem.rect.CalcUL(size), img);
+			return new BitmapOutput(elem, elem.rect.CalcUL(size), img);
 		}
 	}
 }

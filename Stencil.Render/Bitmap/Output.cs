@@ -4,20 +4,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Stencil.Core;
+using Stencil.Elements;
 
 namespace Stencil.Render
 {
 	public class BitmapOutput : Output, IDisposable
 	{
 		public Bitmap render;
-		internal BitmapOutput(Bitmap r)
+		internal BitmapOutput(Base n, Bitmap r)
 		{
 			var wh = r.Size.ToVector();
 			width = wh.x;
 			height = wh.y;
 			render = r;
+			node = n;
 		}
-		internal BitmapOutput(Vector v, Bitmap r) : this(r)
+		internal BitmapOutput(Base n, Vector v, Bitmap r) : this(n, r)
 		{
 			left = v.x;
 			up = v.y;

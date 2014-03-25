@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
+using System.Linq;
 using Stencil.Core;
 using Stencil.Elements;
 using Y = YamlDotNet.RepresentationModel;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Stencil
 {
@@ -46,6 +47,31 @@ namespace Stencil
 					
 					var fac = new ElementFactory(ppi, unit);
 					var tpl = new Template(fac.Detect(node));
+
+					if (node.hasKey("vars"))
+					{
+						var vars = node.key("vars");
+						if (vars.type == YamlElement.Types.Sequence)
+							foreach (var item in vars.list())
+								switch (item.type)
+								{
+									case YamlElement.Types.Scalar:
+										{
+											var arr = item.val().Split(',');
+											if (arr.Length > 1) { tpl.variables.Add(arr[0], arr[1]); }
+											else if (arr.Length > 0) { tpl.variables.Add(arr[0], arr[0]); }
+											break;
+										}
+									case YamlElement.Types.Sequence:
+										{
+											var arr = item.list().Select(i => i.str()).ToList();
+											if (arr.Count > 1) { tpl.variables.Add(arr[0], arr[1]); }
+											else if (arr.Count > 0) { tpl.variables.Add(arr[0], arr[0]); }
+											break;
+										}
+								}
+					}
+
 					tpls.Add(tpl);
 				}
 				return tpls;

@@ -4,6 +4,7 @@ using System.Text;
 using Stencil.Core;
 using System.Drawing.Printing;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace Stencil.Render
 {
@@ -167,6 +168,8 @@ namespace Stencil.Render
 				if (Started) { End(); }
 
 				pd = new PrintDocument();
+				pd.PrintController = new StandardPrintController();
+				pd.PrinterSettings.PrinterName = Name;
 				pd.DocumentName = document;
 				pd.PrintPage += Page;
 			}

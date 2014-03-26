@@ -11,7 +11,12 @@ namespace Stencil.Core
 			else { x = 0; y = 0; }
 		}
 		public Vector(Vector v) { x = v.x; y = v.y; }
-		
+
+		public override string ToString()
+		{
+			return string.Format("{0}, {1}", x.ToString(), y.ToString());
+		}
+
 		public static Vector operator +(Vector a, Vector b) { return new Vector { x = a.x + b.x, y = a.y + b.y }; }
 		public static Vector operator -(Vector a, Vector b) { return new Vector { x = a.x - b.x, y = a.y - b.y }; }
 	}

@@ -13,34 +13,32 @@ namespace Stencil.Elements
 		public int pitch = 4, margin = 4;
 
 		public QR(string value) : base(value) { }
-		public QR(YamlElement node, ElementFactory fac, YamlElement def = null)
+		public QR(YamlElement node, ElementFactory fac, DataMap def = null)
 			: base(node, fac, def ?? (fac.style.ContainsKey("qr") ? fac.style["qr"] : null))
 		{
 		}
-		public override void Configure(YamlElement node, ElementFactory fac)
+		public override void Configure(DataMap node, ElementFactory fac)
 		{
 			base.Configure(node, fac);
-			if (node.type != YamlElement.Types.Map) { return; }
-
-			if (node.hasKey("error"))
+			if (node.Has("error"))
 			{
 				Error err;
-				if (Enum.TryParse(node.get("error"), out err)) { error = err; }
+				if (Enum.TryParse(node.Get("error"), out err)) { error = err; }
 			}
-			if (node.hasKey("resize"))
+			if (node.Has("resize"))
 			{
 				Resize rs;
-				if (Enum.TryParse(node.get("resize"), out rs)) { resize = rs; }
+				if (Enum.TryParse(node.Get("resize"), out rs)) { resize = rs; }
 			}
-			if (node.hasKey("pitch"))
+			if (node.Has("pitch"))
 			{
 				int pt;
-				if (int.TryParse(node.get("pitch"), out pt)) { pitch = pt; }
+				if (int.TryParse(node.Get("pitch"), out pt)) { pitch = pt; }
 			}
-			if (node.hasKey("margin"))
+			if (node.Has("margin"))
 			{
 				int mg;
-				if (int.TryParse(node.get("margin"), out mg)) { pitch = mg; }
+				if (int.TryParse(node.Get("margin"), out mg)) { margin = mg; }
 			}
 		}
 	}

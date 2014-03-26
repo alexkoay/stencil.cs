@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -48,7 +49,7 @@ namespace Stencil.Render
 				foreach (BitmapOutput o in childs)
 				{
 					grf.DrawImage(
-						o.render, new Rectangle((int)o.up, (int)o.left, (int)o.width, (int)o.height),
+						o.render, new Rectangle((int)o.left, (int)o.up, (int)o.width, (int)o.height),
 						0, 0, o.width, o.height,
 						GraphicsUnit.Pixel, attr);
 					o.Dispose();
@@ -63,6 +64,8 @@ namespace Stencil.Render
 		protected override BitmapOutput RenderE(Graphic elem, Template tpl, DataMap data)
 		{
 			var path = elem.data.parse(data);
+			if (!Path.IsPathRooted(path) && tpl.values.Has("path")) { path = Path.Combine(tpl.values.Get("path"), path); }
+
 			System.Drawing.Image file = null;
 			var size = elem.rect.Size;
 			try

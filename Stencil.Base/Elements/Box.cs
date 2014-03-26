@@ -16,36 +16,41 @@ namespace Stencil.Elements
 			nodes = n ?? new List<Base>();
 			invert = inv;
 		}
-		public Box(YamlElement node, ElementFactory fac, YamlElement def = null)
+		public Box(YamlElement node, ElementFactory fac, DataMap def = null)
 			: base(node, fac, def ?? (fac.style.ContainsKey("box") ? fac.style["box"] : null))
 		{
-			switch (node.type)
+			switch (node.Type)
 			{
 				case YamlElement.Types.Sequence:
-					nodes = node.list().Select(i => fac.Detect(i)).ToList();
+					nodes = node.List().Select(i => fac.Detect(i)).ToList();
 					break;
 				case YamlElement.Types.Map:
-					if (node.hasKey("elements"))
+					if (node.Has("elements"))
 					{
-						var elem = node.key("elements");
-						if (elem.type == YamlElement.Types.Sequence)
+						var elem = node.Key("elements");
+						if (elem.Type == YamlElement.Types.Sequence)
 						{
 							var cfac = new ElementFactory(fac);
-							foreach (var pair in node.keys()) { cfac.style[pair.Key] = pair.Value; }
-							nodes = elem.list().Select(i => cfac.Detect(i)).ToList();
+							foreach (var pair in node.Keys())
+							{
+								if (pair.Value.Type != YamlElement.Types.Map) { continue; }
+								DataMap dat = null;
+								if (!cfac.style.ContainsKey(pair.Key)) { cfac.style[pair.Key] = dat = new DataMap(); }
+								else { cfac.style[pair.Key] = dat = cfac.style[pair.Key].Copy(); }
+								dat.Join(pair.Value.ToData());
+							}
+							nodes = elem.List().Select(i => cfac.Detect(i)).ToList();
 						}
 					}
 					break;
 			}
 		}
-		public override void Configure(YamlElement node, ElementFactory fac)
+		public override void Configure(DataMap node, ElementFactory fac)
 		{
 			base.Configure(node, fac);
-			if (node.type != YamlElement.Types.Map) { return; }
-
-			if (node.hasKey("invert"))
+			if (node.Has("invert"))
 			{
-				bool.TryParse(node.get("invert"), out invert);
+				bool.TryParse(node.Get("invert"), out invert);
 			}
 		}
 

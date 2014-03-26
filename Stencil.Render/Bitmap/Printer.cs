@@ -28,7 +28,7 @@ namespace Stencil.Render
 			type = t;
 			switch (type)
 			{
-				case Type.Detect: throw new Exception("Unable to detect printer type.");
+				case Type.Detect: throw new Exception("Unable to detect printer Type.");
 				case Type.Normal: break;
 				case Type.Zebra: Prt = new ZPL(Name);  break;
 			}

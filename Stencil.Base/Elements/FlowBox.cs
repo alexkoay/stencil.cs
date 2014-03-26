@@ -14,27 +14,27 @@ namespace Stencil.Elements
 		public float factor = .0f;
 
 		public FlowBox(List<Base> n = null, bool inv = false) : base(n, inv) { }
-		public FlowBox(YamlElement node, ElementFactory fac, YamlElement def = null)
+		public FlowBox(YamlElement node, ElementFactory fac, DataMap def = null)
 			: base(node, fac, def ?? (fac.style.ContainsKey("flowbox") ? fac.style["flowbox"] : null))
 		{
 		}
-		public override void Configure(YamlElement node, ElementFactory fac)
+		public override void Configure(DataMap node, ElementFactory fac)
 		{
-			if (node.type != YamlElement.Types.Map) { return; } 
 			base.Configure(node, fac);
-			if (node.hasKey("dir"))
+
+			if (node.Has("dir"))
 			{
 				Direction dr;
-				if (Enum.TryParse(node.get("dir"), true, out dr)) { dir = dr; }
+				if (Enum.TryParse(node.Get("dir"), true, out dr)) { dir = dr; }
 			}
-			if (node.hasKey("factor"))
+			if (node.Has("factor"))
 			{
 				float fct;
-				if (float.TryParse(node.get("factor"), out fct) && !float.IsNaN(fct)) { factor = fct; }
+				if (float.TryParse(node.Get("factor"), out fct) && !float.IsNaN(fct)) { factor = fct; }
 			}
-			if (node.hasKey("factor"))
+			if (node.Has("spacing"))
 			{
-				var sp = fac.unit.Detect(node.get("spacing"));
+				var sp = fac.unit.Detect(node.Get("spacing"));
 				if (sp.Valid) { spacing = sp; }
 			}			
 		}

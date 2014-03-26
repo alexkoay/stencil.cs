@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Stencil.Core;
 
-namespace Stencil.Core
+namespace Stencil
 {
 	public class DataMap
 	{
 		Dictionary<string, string> data;
 		public DataMap() : this(new Dictionary<string, string>()) { }
-		public DataMap(Dictionary<string, string> dict) { data = dict ?? new Dictionary<string, string>(); }
+		public DataMap(Dictionary<string, string> dict) { data = dict ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase); }
+		public DataMap(YamlElement node) { data = node.ToData(); }
 		public IEnumerator<KeyValuePair<string, string>> GetEnumerator() { return data.GetEnumerator(); }
 
 		public static implicit operator DataMap(Dictionary<string, string> d) { return new DataMap(d); }
@@ -21,6 +24,7 @@ namespace Stencil.Core
 			return data;
 		}
 
+		public bool Has(string k) { return data.ContainsKey(k); }
 		public void Set(string k, string v) { data[k] = v; }
 		public string Get(string k) { return data[k]; }
 		public string Get(string k, string def) { try { return data[k]; } catch { return def; } }

@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Core\UnitFactory.cs" />
     <Compile Include="Elements\Base.cs" />
-    <Compile Include="Core\DataMap.cs" />
+    <Compile Include="DataMap.cs" />
     <Compile Include="Core\Dimension.cs" />
     <Compile Include="Elements\Box.cs" />
     <Compile Include="Elements\ElementFactory.cs" />

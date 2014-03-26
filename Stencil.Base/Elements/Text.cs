@@ -14,33 +14,31 @@ namespace Stencil.Elements
 		public Style style = Style.Normal;
 
 		public Text(string value) : base(value) { }
-		public Text(YamlElement node, ElementFactory fac, YamlElement def = null)
+		public Text(YamlElement node, ElementFactory fac, DataMap def = null)
 			: base(node, fac, def ?? (fac.style.ContainsKey("text") ? fac.style["text"] : null))
 		{
 		}
-		public override void Configure(YamlElement node, ElementFactory fac)
+		public override void Configure(DataMap node, ElementFactory fac)
 		{
 			base.Configure(node, fac);
-			if (node.type != YamlElement.Types.Map) { return; }
-
-			if (node.hasKey("family"))
+			if (node.Has("family"))
 			{
-				family = node.get("family");
+				family = node.Get("family");
 			}
-			if (node.hasKey("fontsize"))
+			if (node.Has("fontsize"))
 			{
-				var sz = fac.unit.Detect(node.get("fontsize"), fac.unit.Point);
+				var sz = fac.unit.Detect(node.Get("fontsize"), fac.unit.Point);
 				if (sz.Valid) { fontsize = sz; }
 			}
-			if (node.hasKey("weight"))
+			if (node.Has("weight"))
 			{
 				Weight wt;
-				if (Enum.TryParse(node.get("weight"), out wt)) { weight = wt; }
+				if (Enum.TryParse(node.Get("weight"), out wt)) { weight = wt; }
 			}
-			if (node.hasKey("style"))
+			if (node.Has("style"))
 			{
 				Style st;
-				if (Enum.TryParse(node.get("style"), out st)) { style = st; }
+				if (Enum.TryParse(node.Get("style"), out st)) { style = st; }
 			}
 		}
 	}

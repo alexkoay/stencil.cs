@@ -11,5 +11,10 @@ namespace Stencil.Core
 		internal float value;
 		public bool Valid { get { return !float.IsNaN(value); } }
 		public Unit(float v) { value = v; }
+	
+		public override string ToString()
+		{
+			return string.Format("{0:0.0#}", value);
+		}
 	}
 }

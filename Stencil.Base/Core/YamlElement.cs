@@ -11,7 +11,7 @@ namespace Stencil.Core
 		public enum Types { None, Scalar, Sequence, Map };
 
 		public Y.YamlNode node;
-		public Types type {
+		public Types Type {
 			get
 			{
 				var t = node.GetType();
@@ -21,9 +21,9 @@ namespace Stencil.Core
 				else { return Types.None; }
 			}
 		}
-		Y.YamlScalarNode scalar { get { return (Y.YamlScalarNode)node; } }
-		Y.YamlSequenceNode seq { get { return (Y.YamlSequenceNode)node; } }
-		Y.YamlMappingNode map { get { return (Y.YamlMappingNode)node; } }
+		Y.YamlScalarNode Scalar { get { return (Y.YamlScalarNode)node; } }
+		Y.YamlSequenceNode Seq { get { return (Y.YamlSequenceNode)node; } }
+		Y.YamlMappingNode Map { get { return (Y.YamlMappingNode)node; } }
 
 		public YamlElement(Y.YamlNode n) { node = n; }
 		public YamlElement(string s) { node = new Y.YamlScalarNode(s); }
@@ -32,33 +32,33 @@ namespace Stencil.Core
 		public static implicit operator Y.YamlNode(YamlElement n) { return n.node; }
 
 		// string
-		public string str() { return node.ToString(); }
+		public string Str() { return node.ToString(); }
 
-		// scalar
-		public string val() { return scalar.Value; }
-		public string val(string def) { try { return scalar.Value; } catch { return def; } }
+		// Scalar
+		public string Val() { return Scalar.Value; }
+		public string Val(string def) { try { return Scalar.Value; } catch { return def; } }
 
 		// sequence
-		public IEnumerable<YamlElement> list() { return seq.Children.Select(i => (YamlElement)i); }
-		public YamlElement pos(int idx) { return seq.Children[idx]; }
-		public YamlElement pos(int idx, string def) { try { return pos(idx); } catch { return new YamlElement(def); } }
+		public IEnumerable<YamlElement> List() { return Seq.Children.Select(i => (YamlElement)i); }
+		public YamlElement Pos(int idx) { return Seq.Children[idx]; }
+		public YamlElement Pos(int idx, string def) { try { return Pos(idx); } catch { return new YamlElement(def); } }
 
 		// mapping
-		public IEnumerable<KeyValuePair<string, YamlElement>> keys() { return map.Children.Select(i => new KeyValuePair<string, YamlElement>(i.Key.ToString(), i.Value)); }
-		public bool hasKey(string k) { return map.Children.ContainsKey(new YamlElement(k)); }
-		public YamlElement key(YamlElement k) { return map.Children[k]; }
-		public YamlElement key(string k) { return key(new YamlElement(k)); }
-		public YamlElement key(YamlElement k, YamlElement def) { try { return key(k); } catch { return def; } }
-		public YamlElement key(YamlElement k, string def) { return key(k, new YamlElement(def)); }
-		public YamlElement key(string k, string def) { return key(new YamlElement(k), def); }
+		public IEnumerable<KeyValuePair<string, YamlElement>> Keys() { return Map.Children.Select(i => new KeyValuePair<string, YamlElement>(i.Key.ToString(), i.Value)); }
+		public bool Has(string k) { return Map.Children.ContainsKey(new YamlElement(k)); }
+		public YamlElement Key(YamlElement k) { return Map.Children[k]; }
+		public YamlElement Key(string k) { return Key(new YamlElement(k)); }
+		public YamlElement Key(YamlElement k, YamlElement def) { try { return Key(k); } catch { return def; } }
+		public YamlElement Key(YamlElement k, string def) { return Key(k, new YamlElement(def)); }
+		public YamlElement Key(string k, string def) { return Key(new YamlElement(k), def); }
 
 		// direct-to-value
-		public string get(int p) { return pos(p).val(); }
-		public string get(int p, string def) { try { return get(p); } catch { return def; } }
-		public string get(string k) { return key(k).val(); }
-		public string get(string k, string def) { try { return get(k); } catch { return def; } }
+		public string Get(int p) { return Pos(p).Val(); }
+		public string Get(int p, string def) { try { return Get(p); } catch { return def; } }
+		public string Get(string k) { return Key(k).Val(); }
+		public string Get(string k, string def) { try { return Get(k); } catch { return def; } }
 
 		// as data
-		public DataMap ToData() { return new DataMap(map.Children.ToDictionary(i => i.Key.ToString(), i => i.Value.ToString())); }
+		public DataMap ToData() { return new DataMap(Map.Children.ToDictionary(i => i.Key.ToString(), i => i.Value.ToString())); }
 	}
 }

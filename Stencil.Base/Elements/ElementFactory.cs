@@ -9,30 +9,30 @@ namespace Stencil.Elements
 	public class ElementFactory
 	{
 		public UnitFactory unit;
-		public Dictionary<string, YamlElement> style;
+		public Dictionary<string, DataMap> style;
 
 		public ElementFactory()
 		{
 			unit = new UnitFactory();
-			style = new Dictionary<string, YamlElement>(StringComparer.OrdinalIgnoreCase);
+			style = new Dictionary<string, DataMap>(StringComparer.OrdinalIgnoreCase);
 		}
 		public ElementFactory(float ppi, string type = "")
 		{
 			unit = new UnitFactory(ppi, type);
-			style = new Dictionary<string, YamlElement>(StringComparer.OrdinalIgnoreCase);
+			style = new Dictionary<string, DataMap>(StringComparer.OrdinalIgnoreCase);
 		}
 		public ElementFactory(ElementFactory other)
 		{
 			unit = other.unit;
-			style = new Dictionary<string, YamlElement>(other.style, StringComparer.OrdinalIgnoreCase);
+			style = new Dictionary<string, DataMap>(other.style, StringComparer.OrdinalIgnoreCase);
 		}
 
 		public Base Detect(YamlElement node)
 		{
-			if (node.type == YamlElement.Types.Scalar) { return new Text(node, this); }
-			else if (node.type == YamlElement.Types.Sequence) { return new Box(node, this); }
+			if (node.Type == YamlElement.Types.Scalar) { return new Text(node, this); }
+			else if (node.Type == YamlElement.Types.Sequence) { return new Box(node, this); }
 
-			var type = node.get("type", "");
+			var type = node.Get("type", "");
 			switch (type)
 			{
 				case "text": return new Text(node, this);

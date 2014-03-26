@@ -8,32 +8,32 @@ namespace Stencil.Elements
 		public Placeholder data;
 		public bool collapse = false;
 		public Value(string value) : base() { data = value; }
-		public Value(YamlElement node, ElementFactory fac, YamlElement def = null)
-			: base(node, fac, def ?? (fac.style.ContainsKey("value") ? fac.style["value"] : null))
+		public Value(YamlElement node, ElementFactory fac, DataMap def = null)
+			: base(node, fac, def)
 		{
-			switch (node.type)
+			string str = "";
+			switch (node.Type)
 			{
 				case YamlElement.Types.Scalar:
-					data = node.val();
+					str = node.Val();
 					break;
 				case YamlElement.Types.Map:
-					data = node.get("value", "");
+					str = node.Key("value", "").Str();
 					break;
 			}
+			data = str.Replace("[ [ ", "[[").Replace(" ] ]", "]]");
 		}
-		public override void Configure(YamlElement node, ElementFactory fac)
+		public override void Configure(DataMap node, ElementFactory fac)
 		{
 			base.Configure(node, fac);
-			if (node.type != YamlElement.Types.Map) { return; }
-
-			if (node.hasKey("collapse"))
+			if (node.Has("collapse"))
 			{
-				bool.TryParse(node.get("collapse"), out collapse);
+				bool.TryParse(node.Get("collapse"), out collapse);
 			}
-			if (node.hasKey("coding"))
+			if (node.Has("coding"))
 			{
 				Placeholder.Encoding en;
-				if (Enum.TryParse(node.get("coding"), out en)) { data.coding = en; }
+				if (Enum.TryParse(node.Get("coding"), out en)) { data.coding = en; }
 			}
 		}
 	}

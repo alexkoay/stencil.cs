@@ -35,36 +35,37 @@ namespace Stencil
 					float ppi = 300;
 					string unit = "";
 		
-					if (node.hasKey("dpi"))
+					if (node.Has("dpi"))
 					{
 						float res;
-						if (float.TryParse(node.get("dpi"), out res)) { ppi = res; }
+						if (float.TryParse(node.Get("dpi"), out res)) { ppi = res; }
 					}
-					if (node.hasKey("unit"))
+					if (node.Has("unit"))
 					{
-						unit = node.get("unit");
+						unit = node.Get("unit");
 					}
 					
 					var fac = new ElementFactory(ppi, unit);
 					var tpl = new Template(fac.Detect(node));
 
-					if (node.hasKey("vars"))
+					tpl.values.Set("path", Path.GetDirectoryName(filename));
+					if (node.Has("vars"))
 					{
-						var vars = node.key("vars");
-						if (vars.type == YamlElement.Types.Sequence)
-							foreach (var item in vars.list())
-								switch (item.type)
+						var vars = node.Key("vars");
+						if (vars.Type == YamlElement.Types.Sequence)
+							foreach (var item in vars.List())
+								switch (item.Type)
 								{
 									case YamlElement.Types.Scalar:
 										{
-											var arr = item.val().Split(',');
+											var arr = item.Val().Split(',');
 											if (arr.Length > 1) { tpl.variables.Add(arr[0], arr[1]); }
 											else if (arr.Length > 0) { tpl.variables.Add(arr[0], arr[0]); }
 											break;
 										}
 									case YamlElement.Types.Sequence:
 										{
-											var arr = item.list().Select(i => i.str()).ToList();
+											var arr = item.List().Select(i => i.Str()).ToList();
 											if (arr.Count > 1) { tpl.variables.Add(arr[0], arr[1]); }
 											else if (arr.Count > 0) { tpl.variables.Add(arr[0], arr[0]); }
 											break;

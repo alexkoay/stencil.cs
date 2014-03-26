@@ -2,6 +2,8 @@
 using System.Runtime.InteropServices;
 using System.Text;
 using Stencil.Core;
+using System.Drawing.Printing;
+using System.Drawing;
 
 namespace Stencil.Render
 {
@@ -29,7 +31,7 @@ namespace Stencil.Render
 			switch (type)
 			{
 				case Type.Detect: throw new Exception("Unable to detect printer Type.");
-				case Type.Normal: break;
+				case Type.Normal: Prt = new Paper(Name); break;
 				case Type.Zebra: Prt = new ZPL(Name);  break;
 			}
 		}
@@ -141,6 +143,49 @@ namespace Stencil.Render
 					Win32.EndPagePrinter(handle);
 					Paged = false;
 				}
+			}
+		}
+
+		public class Paper : Printer
+		{
+			public string Name { get; private set; }
+
+			public bool Opened { get { return true; } }
+			public bool Started { get { return pd != null; } }
+			public bool Paged { get; private set; }
+
+			PrintDocument pd;
+			public Paper(string printer) { Name = printer; }
+			~Paper() { Close(); }
+
+			public void Open() { }
+			public void Close() { }
+
+			public void Start(string document)
+			{
+				if (!Opened) { Open(); }
+				if (Started) { End(); }
+
+				pd = new PrintDocument();
+				pd.DocumentName = document;
+				pd.PrintPage += Page;
+			}
+			public void End() { pd = null; }
+
+			public void Setup() { }
+			public void Print(BitmapOutput b, int qty = 1)
+			{
+				bmp = b.render;
+				pd.Print();
+				bmp = null;
+			}
+
+			Bitmap bmp = null;
+			private void Page(object sender, PrintPageEventArgs ev)
+			{
+				if (bmp == null) { return; }
+				ev.Graphics.DrawImage(bmp, ev.Graphics.VisibleClipBounds.Location);
+				ev.HasMorePages = false;
 			}
 		}
 

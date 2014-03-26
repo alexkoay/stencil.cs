@@ -15,7 +15,7 @@ namespace Stencil
 		public static implicit operator DataMap(Dictionary<string, string> d) { return new DataMap(d); }
 		public static implicit operator Dictionary<string, string>(DataMap d) { return d.data; }
 
-		public static DataMap Zip(IEnumerable<string> keys, IEnumerable<string> values)
+		public static DataMap Zip(ICollection<string> keys, ICollection<string> values)
 		{
 			var data = new DataMap();
 			var ki = keys.GetEnumerator();

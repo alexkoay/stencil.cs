@@ -49,6 +49,8 @@ namespace Stencil
 					var tpl = new Template(fac.Detect(node));
 
 					tpl.values.Set("path", Path.GetDirectoryName(filename));
+					tpl.values.Set("media", node.Get("media", "label"));
+
 					if (node.Has("vars"))
 					{
 						var vars = node.Key("vars");

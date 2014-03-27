@@ -6,7 +6,7 @@ namespace Stencil.Core
 		public enum Encoding { None, b64 }
 
 		public Encoding coding;
-		string value;
+		public string value;
 		public Placeholder(string s, Encoding en = Encoding.None)
 		{
 			value = s ?? "";

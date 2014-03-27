@@ -21,7 +21,7 @@ namespace Stencil.Elements
 					str = node.Key("value", "").Str();
 					break;
 			}
-			data = str.Replace("[ [ ", "[[").Replace(" ] ]", "]]");
+			data.value = str.Replace("[ [ ", "[[").Replace(" ] ]", "]]");
 		}
 		public override void Configure(DataMap node, ElementFactory fac)
 		{

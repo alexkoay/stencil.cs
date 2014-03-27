@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Stencil.Core;
 
 namespace Stencil.Elements
@@ -19,6 +20,28 @@ namespace Stencil.Elements
 					break;
 				case YamlElement.Types.Map:
 					str = node.Key("value", "").Str();
+					if (node.Has("substring"))
+					{
+						int pos;
+						var subs = node.Key("substring");
+						if (subs.Type == YamlElement.Types.Map)
+						{
+							if (subs.Has("length") && int.TryParse(subs.Get("length"), out pos)) { data.length = pos; }
+							if (subs.Has("start") && int.TryParse(subs.Get("start"), out pos)) { data.start = pos; }
+						} 
+						else if (subs.Type == YamlElement.Types.Sequence)
+						{
+							var arr = subs.List().Select(i => i.Str()).ToList();
+							if (arr.Count > 1 && int.TryParse(arr[1], out pos)) { data.length = pos; }
+							if (arr.Count > 0 && int.TryParse(arr[0], out pos)) { data.start = pos; }
+						}
+						else if (subs.Type == YamlElement.Types.Scalar)
+						{
+							var arr = subs.Val().Split(',');
+							if (arr.Length > 1 && int.TryParse(arr[1], out pos)) { data.length = pos; }
+							if (arr.Length > 0 && int.TryParse(arr[0], out pos)) { data.start = pos; }
+						}
+					}
 					break;
 			}
 			data.value = str.Replace("[ [ ", "[[").Replace(" ] ]", "]]");
@@ -34,14 +57,6 @@ namespace Stencil.Elements
 			{
 				Placeholder.Encoding en;
 				if (Enum.TryParse(node.Get("coding"), out en)) { data.coding = en; }
-			}
-			if (node.Has("substring"))
-			{
-				var arr = node.Get("substring").TrimStart('[', ' ').TrimEnd(']', ' ').Split(',');
-
-				int pos;
-				if (arr.Length > 1 && int.TryParse(arr[1], out pos)) { data.length = pos; }
-				if (arr.Length > 0 && int.TryParse(arr[0], out pos)) { data.start = pos; }
 			}
 		}
 	}

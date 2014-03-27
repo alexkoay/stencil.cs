@@ -17,7 +17,7 @@ namespace Stencil.Core
 			length = -1;
 		}
 
-		public string parse(DataMap data) {
+		public string Parse(DataMap data) {
 			if (data == null) { return value; }
 
 			string hold = value;

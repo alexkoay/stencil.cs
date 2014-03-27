@@ -63,7 +63,7 @@ namespace Stencil.Render
 
 		protected override BitmapOutput RenderE(Graphic elem, Template tpl, DataMap data)
 		{
-			var path = elem.data.parse(data);
+			var path = elem.data.Parse(data);
 			if (!Path.IsPathRooted(path) && tpl.values.Has("path")) { path = Path.Combine(tpl.values.Get("path"), path); }
 
 			System.Drawing.Image file = null;
@@ -98,7 +98,7 @@ namespace Stencil.Render
 
 		protected override BitmapOutput RenderE(QR elem, Template tpl, DataMap data)
 		{
-			var text = elem.data.parse(data);
+			var text = elem.data.Parse(data);
 
 			// generate QR
 
@@ -168,7 +168,7 @@ namespace Stencil.Render
 
 		protected override BitmapOutput RenderE(Text elem, Template tpl, DataMap data)
 		{
-			var text = elem.data.parse(data);
+			var text = elem.data.Parse(data);
 			var mtext = text;
 			if (!elem.collapse && text == "") { mtext = "x"; }
 			var font = new Font(elem.family, elem.fontsize);

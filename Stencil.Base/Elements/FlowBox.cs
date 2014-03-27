@@ -8,8 +8,6 @@ namespace Stencil.Elements
 	public class FlowBox : Box
 	{
 		public Direction dir = Direction.X;
-		public Alignment contentX = Alignment.None;
-		public Alignment contentY = Alignment.None;
 		public Unit spacing = .0f;
 		public float factor = .0f;
 
@@ -36,7 +34,7 @@ namespace Stencil.Elements
 			{
 				var sp = fac.unit.Detect(node.Get("spacing"));
 				if (sp.Valid) { spacing = sp; }
-			}			
+			}
 		}
 
 		public override void Process(List<Output> nodes)

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Stencil.Core;
+using System;
 
 namespace Stencil.Elements
 {
@@ -9,6 +10,8 @@ namespace Stencil.Elements
 		public enum Direction { X, Y };
 
 		public bool invert = false;
+		public Alignment contentX = Alignment.None;
+		public Alignment contentY = Alignment.None;
 		public List<Base> nodes = new List<Base>();
 
 		public Box(List<Base> n = null, bool inv = false)
@@ -42,6 +45,32 @@ namespace Stencil.Elements
 							nodes = elem.List().Select(i => cfac.Detect(i)).ToList();
 						}
 					}
+					if (node.Has("contentalign"))
+					{
+						var align = node.Key("contentalign");
+						string x = null, y = null;
+						if (align.Type == YamlElement.Types.Map)
+						{
+							x = align.Get("h", null);
+							y = align.Get("v", null);
+						}
+						else if (align.Type == YamlElement.Types.Sequence)
+						{
+							var arr = align.List().Select(i => i.ToString()).ToList();
+							if (arr.Count == 1) { x = y = arr[0]; }
+							else if (arr.Count > 1) { x = arr[0]; y = arr[1]; }
+						}
+						else if (align.Type == YamlElement.Types.Scalar)
+						{
+							var arr = align.Val().Split(',');
+							if (arr.Length == 1) { x = y = arr[0]; }
+							else if (arr.Length > 1) { x = arr[0]; y = arr[1]; }
+						}
+
+						Alignment align_en;
+						if (Enum.TryParse(x, true, out align_en)) { contentX = align_en; }
+						if (Enum.TryParse(y, true, out align_en)) { contentY = align_en; }
+					}
 					break;
 			}
 		}
@@ -60,10 +89,14 @@ namespace Stencil.Elements
 			var max = CalcWH(nodes);
 			foreach (var o in nodes)
 			{
-				if (o.node.alignX != Alignment.None)
+				if (contentX != Alignment.None)
+					CalcAlign(ref o.left, contentX, o.width, max.x);
+				else if (o.node.alignX != Alignment.None)
 					CalcAlign(ref o.left, o.node.alignX, o.width, max.x);
 
-				if (o.node.alignY != Alignment.None) 
+				if (contentY != Alignment.None)
+					CalcAlign(ref o.up, contentY, o.height, max.y);
+				else if (o.node.alignY != Alignment.None) 
 					CalcAlign(ref o.up, o.node.alignY, o.height, max.y);
 			}
 		}

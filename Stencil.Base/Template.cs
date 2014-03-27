@@ -48,6 +48,7 @@ namespace Stencil
 					var fac = new ElementFactory(ppi, unit);
 					var tpl = new Template(fac.Detect(node));
 
+					tpl.values.Set("desc", node.Get("desc", Path.GetFileName(filename)));
 					tpl.values.Set("path", Path.GetDirectoryName(filename));
 					tpl.values.Set("media", node.Get("media", "label"));
 

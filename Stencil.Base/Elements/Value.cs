@@ -5,7 +5,7 @@ namespace Stencil.Elements
 {
 	abstract public class Value : Base
 	{
-		public Placeholder data;
+		public Placeholder data = new Placeholder("");
 		public bool collapse = false;
 		public Value(string value) : base() { data = value; }
 		public Value(YamlElement node, ElementFactory fac, DataMap def = null)
@@ -34,6 +34,14 @@ namespace Stencil.Elements
 			{
 				Placeholder.Encoding en;
 				if (Enum.TryParse(node.Get("coding"), out en)) { data.coding = en; }
+			}
+			if (node.Has("substring"))
+			{
+				var arr = node.Get("substring").TrimStart('[', ' ').TrimEnd(']', ' ').Split(',');
+
+				int pos;
+				if (arr.Length > 1 && int.TryParse(arr[1], out pos)) { data.length = pos; }
+				if (arr.Length > 0 && int.TryParse(arr[0], out pos)) { data.start = pos; }
 			}
 		}
 	}

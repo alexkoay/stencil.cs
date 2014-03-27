@@ -5,12 +5,16 @@ namespace Stencil.Core
 	{
 		public enum Encoding { None, b64 }
 
-		public Encoding coding;
 		public string value;
-		public Placeholder(string s, Encoding en = Encoding.None)
+		public int start, length;
+		public Encoding coding;
+
+		public Placeholder(string s)
 		{
 			value = s ?? "";
-			coding = en;
+			coding = Encoding.None;
+			start = 0;
+			length = -1;
 		}
 
 		public string parse(DataMap data) {
@@ -18,6 +22,15 @@ namespace Stencil.Core
 
 			string hold = value;
 			foreach (var pair in data) { hold = hold.Replace("[[" + pair.Key + "]]", pair.Value); }
+
+			// substring
+			if (start > 0 || length > 0)
+			{
+				hold = (length <= 0)
+					? hold.Substring(start)
+					: hold.Substring(start, length);
+			}
+
 			return Encode(coding, hold);
 		}
 

@@ -33,12 +33,12 @@ namespace Stencil.Elements
 			if (node.Has("weight"))
 			{
 				Weight wt;
-				if (Enum.TryParse(node.Get("weight"), out wt)) { weight = wt; }
+				if (Enum.TryParse(node.Get("weight"), true, out wt)) { weight = wt; }
 			}
 			if (node.Has("style"))
 			{
 				Style st;
-				if (Enum.TryParse(node.Get("style"), out st)) { style = st; }
+				if (Enum.TryParse(node.Get("style"), true, out st)) { style = st; }
 			}
 		}
 	}

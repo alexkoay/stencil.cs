@@ -56,7 +56,7 @@ namespace Stencil.Elements
 			if (node.Has("coding"))
 			{
 				Placeholder.Encoding en;
-				if (Enum.TryParse(node.Get("coding"), out en)) { data.coding = en; }
+				if (Enum.TryParse(node.Get("coding"), true, out en)) { data.coding = en; }
 			}
 		}
 	}

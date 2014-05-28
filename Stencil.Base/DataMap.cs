@@ -35,5 +35,24 @@ namespace Stencil
 		public DataMap Copy() { return new DataMap().Join(data); }
 
 		public static DataMap operator +(DataMap a, DataMap b) { return a.Copy().Join(b); }
+
+		public static List<DataMap> FromFile(string filename)
+		{
+			using (var txt = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+			using (var dat = new StreamReader(txt))
+			{
+				var yaml = new Y.YamlStream();
+				yaml.Load(dat);
+
+				var dats = new System.Collections.Generic.List<DataMap>();
+				foreach (var d in yaml.Documents)
+				{
+					var node = (YamlElement)d.RootNode;
+					if (node.Type != YamlElement.Types.Map) { continue; }
+					dats.Add(new DataMap(d.RootNode));
+				}
+				return dats;
+			}
+		}
 	}
 }

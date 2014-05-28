@@ -23,12 +23,12 @@ namespace Stencil.Elements
 			if (node.Has("error"))
 			{
 				Error err;
-				if (Enum.TryParse(node.Get("error"), out err)) { error = err; }
+				if (Enum.TryParse(node.Get("error"), true, out err)) { error = err; }
 			}
 			if (node.Has("resize"))
 			{
 				Resize rs;
-				if (Enum.TryParse(node.Get("resize"), out rs)) { resize = rs; }
+				if (Enum.TryParse(node.Get("resize"), true, out rs)) { resize = rs; }
 			}
 			if (node.Has("pitch"))
 			{

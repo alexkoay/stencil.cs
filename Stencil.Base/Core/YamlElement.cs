@@ -11,7 +11,8 @@ namespace Stencil.Core
 		public enum Types { None, Scalar, Sequence, Map };
 
 		public Y.YamlNode node;
-		public Types Type {
+		public Types Type
+		{
 			get
 			{
 				var t = node.GetType();

@@ -19,7 +19,8 @@ namespace Stencil.Render
 			render = r;
 			node = n;
 		}
-		internal BitmapOutput(Base n, Vector v, Bitmap r) : this(n, r)
+		internal BitmapOutput(Base n, Vector v, Bitmap r)
+			: this(n, r)
 		{
 			left = v.x;
 			up = v.y;

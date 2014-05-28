@@ -28,7 +28,7 @@ namespace Stencil.Elements
 						{
 							if (subs.Has("length") && int.TryParse(subs.Get("length"), out pos)) { data.length = pos; }
 							if (subs.Has("start") && int.TryParse(subs.Get("start"), out pos)) { data.start = pos; }
-						} 
+						}
 						else if (subs.Type == YamlElement.Types.Sequence)
 						{
 							var arr = subs.List().Select(i => i.Str()).ToList();

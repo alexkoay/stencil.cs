@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Stencil.Core;
+using Y = YamlDotNet.RepresentationModel;
 
 namespace Stencil
 {

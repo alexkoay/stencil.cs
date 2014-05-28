@@ -6,11 +6,13 @@ namespace Stencil.Elements
 {
 	abstract public class Base
 	{
-		public enum Alignment {
+		public enum Alignment
+		{
 			None = 0,
 			Min, Left = Min, Top = Min, Up = Min,
 			Mid, Center = Mid,
-			Max, Right = Max, Bottom = Max, Down = Max };
+			Max, Right = Max, Bottom = Max, Down = Max
+		};
 
 		public Dimension rect;
 		public Alignment alignX, alignY;
@@ -34,7 +36,8 @@ namespace Stencil.Elements
 					rect.Left = fac.unit.Detect(pos.Get("left", null));
 					rect.Right = fac.unit.Detect(pos.Get("right", null));
 				}
-				else if (pos.Type == YamlElement.Types.Sequence) {
+				else if (pos.Type == YamlElement.Types.Sequence)
+				{
 					var arr = pos.List().Select(i => (Unit)fac.unit.Detect(i.Val(null)));
 					rect = new Dimension(arr.ToArray());
 				}
@@ -54,7 +57,8 @@ namespace Stencil.Elements
 					rect.Width = fac.unit.Detect(size.Get("width", null));
 					rect.Height = fac.unit.Detect(size.Get("height", null));
 				}
-				else if (size.Type == YamlElement.Types.Sequence) {
+				else if (size.Type == YamlElement.Types.Sequence)
+				{
 					var arr = size.List().Select(i => fac.unit.Detect(i.Val(null)));
 					rect.Size = new Vector(arr.ToArray());
 				}
@@ -90,7 +94,7 @@ namespace Stencil.Elements
 
 				Alignment align_en;
 				if (Enum.TryParse(x, true, out align_en)) { alignX = align_en; }
-				if (Enum.TryParse(y, true, out align_en)) { alignY = align_en; } 
+				if (Enum.TryParse(y, true, out align_en)) { alignY = align_en; }
 			}
 		}
 		virtual public void Configure(DataMap node, ElementFactory fac) { }

@@ -5,7 +5,8 @@ namespace Stencil.Core
 	{
 		public Unit x, y;
 
-		public Vector(params Unit[] v) {
+		public Vector(params Unit[] v)
+		{
 			if (v.Length == 1) { x = v[0]; y = v[0]; }
 			else if (v.Length > 1) { x = v[0]; y = v[1]; }
 			else { x = 0; y = 0; }

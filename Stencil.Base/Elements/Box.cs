@@ -96,7 +96,7 @@ namespace Stencil.Elements
 
 				if (contentY != Alignment.None)
 					CalcAlign(ref o.up, contentY, o.height, max.y);
-				else if (o.node.alignY != Alignment.None) 
+				else if (o.node.alignY != Alignment.None)
 					CalcAlign(ref o.up, o.node.alignY, o.height, max.y);
 			}
 		}

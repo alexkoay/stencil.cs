@@ -34,7 +34,7 @@ namespace Stencil
 
 					float ppi = 300;
 					string unit = "";
-		
+
 					if (node.Has("dpi"))
 					{
 						float res;
@@ -44,7 +44,7 @@ namespace Stencil
 					{
 						unit = node.Get("unit");
 					}
-					
+
 					var fac = new ElementFactory(ppi, unit);
 					var tpl = new Template(fac.Detect(node));
 

@@ -19,10 +19,11 @@ namespace Stencil.Core
 
 		public string Parse(DataMap data)
 		{
-			if (data == null) { return value; }
-
 			string hold = value;
-			foreach (var pair in data) { hold = hold.Replace("[[" + pair.Key + "]]", pair.Value); }
+
+			if (data != null)
+				foreach (var pair in data)
+					hold = hold.Replace("[[" + pair.Key + "]]", pair.Value);
 
 			// substring
 			if (start > 0 || length > 0)
